@@ -1,8 +1,7 @@
 import streamlit as st
 import json
 import requests
-from collections import Counter
-from bs4 import BeautifulSoup
+
 
 # Configuration de la page Streamlit
 st.set_page_config(
@@ -10,6 +9,7 @@ st.set_page_config(
     page_title="Occurus Rewrite",
     page_icon="🍒"
 )
+
 
 # Définir la fonction GPT35
 def GPT35(prompt, systeme, secret_key, temperature=0.9, model="gpt-4o", max_tokens=1200):
@@ -34,7 +34,7 @@ def GPT35(prompt, systeme, secret_key, temperature=0.9, model="gpt-4o", max_toke
     response_json = response.json()
     return response_json['choices'][0]['message']['content'].strip()
 
-# Fonction pour ajouter des occurrences de mots et compter les occurrences
+# Fonction pour ajouter des occurrences de mots
 def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt):
     words_instruction = "\n".join([f"Le mot '{word}' doit apparaître {occurrences} fois."
                                    for word, occurrences in words_with_occurrences.items()])
@@ -52,14 +52,6 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
 
     modified_text = GPT35(prompt, system_message, secret_key)
     return modified_text
-
-# Fonction pour surligner les mots dans le texte
-def highlight_words(text, words):
-    soup = BeautifulSoup(text, "html.parser")
-    for word in words:
-        highlighted_word = f"<mark>{word}</mark>"
-        text = text.replace(word, highlighted_word)
-    return text
 
 # Interface utilisateur avec Streamlit
 st.title('Modification de Texte avec Occurrences de Mots')
@@ -80,19 +72,7 @@ if st.button('Soumettre'):
         try:
             words_with_occurrences = json.loads(words_input)
             modified_text = add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt)
-            
-            # Compter les occurrences de chaque mot dans le texte modifié
-            word_counts = Counter(modified_text.split())
-            added_occurrences = {word: word_counts[word] for word in words_with_occurrences}
-            
-            # Surligner les mots dans le texte modifié
-            highlighted_text = highlight_words(modified_text, words_with_occurrences.keys())
-            
-            # Afficher le texte modifié et les occurrences ajoutées
             st.subheader('Texte modifié')
-            st.markdown(highlighted_text, unsafe_allow_html=True)
-            
-            st.subheader('Occurrences ajoutées par mot')
-            st.table(added_occurrences.items())
+            st.write(modified_text)
         except json.JSONDecodeError:
             st.error('Erreur : Veuillez fournir un format JSON valide pour les mots avec occurrences.')
