@@ -4,4 +4,6 @@ openpyxl
 altair
 numpy
 counter
-beautifulSoup
+beautifulsoup4
+beautifulsoup4 lxml
+
