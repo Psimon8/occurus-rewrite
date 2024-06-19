@@ -2,6 +2,15 @@ import streamlit as st
 import json
 import requests
 
+
+# Configuration de la page Streamlit
+st.set_page_config(
+    layout="wide",
+    page_title="Occurus Rewrite",
+    page_icon="🍒"
+)
+
+
 # Définir la fonction GPT35
 def GPT35(prompt, systeme, secret_key, temperature=0.9, model="gpt-4o", max_tokens=1200):
     url = "https://api.openai.com/v1/chat/completions"
