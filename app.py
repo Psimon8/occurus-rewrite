@@ -26,12 +26,12 @@ def GPT35(prompt, systeme, secret_key, temperature=0.9, model="gpt-4o", max_toke
     return response_json['choices'][0]['message']['content'].strip()
 
 # Fonction pour ajouter des occurrences de mots
-def add_word_occurrences(existing_text, words_with_occurrences, secret_key):
+def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt):
     words_instruction = "\n".join([f"Le mot '{word}' doit apparaître {occurrences} fois."
                                    for word, occurrences in words_with_occurrences.items()])
 
     prompt = (f"Voici le texte original :\n{existing_text}\n\n"
-              f"Veuillez modifier le texte en ajoutant et en changeant des phrases pour intégrer naturellement les occurrences suivantes :\n{words_instruction}\n\n"
+              f"{user_prompt}\n\n"
               f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO."
               f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié")
 
@@ -50,6 +50,11 @@ st.title('Modification de Texte avec Occurrences de Mots')
 secret_key = st.text_input('Clé Secrète OpenAI', type="password")
 existing_text = st.text_area('Texte existant', height=150)
 words_input = st.text_area('Mots et occurrences (format JSON)', height=100, placeholder='{"exemple": 3, "additionnel": 2}')
+default_prompt = (f"Veuillez modifier le texte en ajoutant et en changeant des phrases pour intégrer naturellement les occurrences suivantes :\n"
+                  f"{words_input}\n\n"
+                  f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO."
+                  f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié")
+user_prompt = st.text_area('Prompt pour la modification du texte', value=default_prompt, height=100)
 
 if st.button('Soumettre'):
     if not secret_key:
@@ -57,9 +62,8 @@ if st.button('Soumettre'):
     else:
         try:
             words_with_occurrences = json.loads(words_input)
-            modified_text = add_word_occurrences(existing_text, words_with_occurrences, secret_key)
+            modified_text = add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt)
             st.subheader('Texte modifié')
             st.write(modified_text)
         except json.JSONDecodeError:
             st.error('Erreur : Veuillez fournir un format JSON valide pour les mots avec occurrences.')
-
