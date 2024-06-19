@@ -41,7 +41,7 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
 
     prompt = (f"Voici le texte original :\n{existing_text}\n\n"
               f"{user_prompt}\n\n"
-              f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO. "
+              f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO.\n"
               f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié")
 
     system_message = (f"Vous êtes un assistant de rédaction compétent et expérimenté spécialisé dans le domaine de la décoration intérieure, avec un focus particulier sur les lampes à poser."
