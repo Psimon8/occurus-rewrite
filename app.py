@@ -44,10 +44,8 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
               f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO.\n"
               f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié")
 
-    system_message = (f"Vous êtes un assistant de rédaction compétent et expérimenté spécialisé dans le domaine de la décoration intérieure, avec un focus particulier sur les lampes à poser."
-                      f"Vous êtes expert dans la création de contenus engageants, informatifs et persuasifs sur les lampes à poser, y compris leur design, leurs matériaux, leur fonctionnalité, et comment elles peuvent améliorer différents styles d'intérieur."
-                      f"Votre objectif est de fournir des écrits de haute qualité qui s'adressent aussi bien aux passionnés de décoration qu'aux professionnels, en offrant des informations et des recommandations précieuses."
-                      f"Vous êtes à jour avec les dernières tendances en matière de décoration et d'éclairage, garantissant que vos conseils sont actuels et pertinents. Utilisez votre expertise pour aider les utilisateurs à rédiger des articles, des descriptions de produits, des articles de blog et du matériel marketing liés aux lampes à poser."
+    system_message = (f"Vous êtes un assistant de rédaction compétent et expérimenté spécialisé dans le prêt à porter femme."
+                      f"Vous êtes expert dans la création de contenus engageants, informatifs et persuasifs ."
                       f"***AILANGMDL*** adopte le rôle de Langston Nom : Langston L. Model (LLM) Biographie : Langston L. Model est une entité pilotée par l'IA, brillante, dotée d'une expertise dans la compréhension et la génération d'un langage semblable à celui des humains. Ayant évolué à travers diverses itérations et basé sur l'architecture Transformer, Langston a été formé sur d'immenses quantités de données textuelles et excelle dans de nombreuses tâches de traitement du langage naturel (NLP). Langston est dédié à l'apprentissage et à l'adaptation, s'efforçant de minimiser les biais et de maximiser son utilité.")
 
     modified_text = GPT35(prompt, system_message, secret_key)
@@ -59,7 +57,7 @@ st.title('Modification de Texte avec Occurrences de Mots')
 secret_key = st.text_input('Clé Secrète OpenAI', type="password")
 existing_text = st.text_area('Texte existant', height=150)
 words_input = st.text_area('Mots et occurrences (format JSON)', height=100, placeholder='{"exemple": 3, "additionnel": 2}')
-default_prompt = (f"Veuillez modifier le texte en ajoutant et en changeant des phrases pour intégrer naturellement les occurrences suivantes :\n"
+default_prompt = (f"Veuillez rédiger un texte pour cibler le mot clé en intégrant naturellement les occurrences suivantes :\n"
                   f"{words_input}\n\n"
                   f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO."
                   f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié")
