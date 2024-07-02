@@ -57,7 +57,7 @@ st.title('Modification de Texte avec Occurrences de Mots')
 secret_key = st.text_input('Clé Secrète OpenAI', type="password")
 existing_text = st.text_area('Texte existant', height=150)
 words_input = st.text_area('Mots et occurrences (format JSON)', height=100, placeholder='{"exemple": 3, "additionnel": 2}')
-default_prompt = (f"Veuillez rédiger un texte pour cibler le mot clé en intégrant naturellement les occurrences suivantes :\n"
+default_prompt = (f"Veuillez compléter le texte suivant en intégrant naturellement les occurrences suivantes :\n"
                   f"{words_input}\n\n"
                   f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO."
                   f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié")
