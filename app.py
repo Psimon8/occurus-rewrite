@@ -44,7 +44,7 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
               f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO.\n"
               f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié")
 
-    system_message = (f"Vous êtes un assistant de rédaction compétent et expérimenté spécialisé dans le prêt à porter femme."
+    system_message = (f"Vous êtes un assistant de rédaction compétent et expérimenté spécialisé dans le traitement naturel des textes."
                       f"Vous êtes expert dans la création de contenus engageants, informatifs et persuasifs ."
                       f"***AILANGMDL*** adopte le rôle de Langston Nom : Langston L. Model (LLM) Biographie : Langston L. Model est une entité pilotée par l'IA, brillante, dotée d'une expertise dans la compréhension et la génération d'un langage semblable à celui des humains. Ayant évolué à travers diverses itérations et basé sur l'architecture Transformer, Langston a été formé sur d'immenses quantités de données textuelles et excelle dans de nombreuses tâches de traitement du langage naturel (NLP). Langston est dédié à l'apprentissage et à l'adaptation, s'efforçant de minimiser les biais et de maximiser son utilité.")
 
@@ -57,10 +57,11 @@ st.title('Modification de Texte avec Occurrences de Mots')
 secret_key = st.text_input('Clé Secrète OpenAI', type="password")
 existing_text = st.text_area('Texte existant', height=150)
 words_input = st.text_area('Mots et occurrences (format JSON)', height=100, placeholder='{"exemple": 3, "additionnel": 2}')
-default_prompt = (f"Veuillez compléter le texte suivant en intégrant naturellement les occurrences suivantes :\n"
+default_prompt = (f"Veuillez rédiger un texte générique en intégrant naturellement les occurrences suivantes :\n"
                   f"{words_input}\n\n"
-                  f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO."
-                  f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié")
+                  f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO. Parle à la 3ème personne du singulier"
+                  f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié"
+                  f"Le texte doit être structuré avec des balises <h1> sur le titre du texte, des balises <h2> sur les titres des sous-parties, des balises <p> sur les paragraphes")
 user_prompt = st.text_area('Prompt pour la modification du texte', value=default_prompt, height=100)
 
 if st.button('Soumettre'):
