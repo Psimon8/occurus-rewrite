@@ -59,7 +59,7 @@ existing_text = st.text_area('Texte existant', height=150)
 words_input = st.text_area('Mots et occurrences (format JSON)', height=100, placeholder='{"exemple": 3, "additionnel": 2}')
 default_prompt = (f"Veuillez rédiger un texte générique, ciblant ce mot clé: en intégrant naturellement les occurrences suivantes :\n"
                   f"{words_input}\n\n"
-                  f"Le texte doit rester naturel et cohérent. N'utilses pas mot introduction ou conclusion. Tu es un expert en rédaction SEO. Parle à la 3ème personne du singulier."
+                  f"Le texte doit rester naturel et cohérent. N'utilses pas mot introduction ou conclusion. Tu es un expert en rédaction SEO. Parle à la 3ème personne du singulier. "
                   f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié. Le texte doit faire environ 300 mots."
                   f"Le texte doit être structuré avec des balises <h2> sur le titre du texte, des balises <h3> sur les titres des sous-parties, des balises <p> sur les paragraphes")
 user_prompt = st.text_area('Prompt pour la modification du texte', value=default_prompt, height=100)
