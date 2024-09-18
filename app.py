@@ -53,9 +53,9 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
 st.title('Modification de Texte avec Occurrences de Mots')
 
 # Ajouter un champ pour le mot clé principal
-main_keyword = st.text_input('Mot clé principal', placeholder='Entrez le mot clé principal')
 
 secret_key = st.text_input('Clé Secrète OpenAI', type="password")
+main_keyword = st.text_input('Mot clé principal', placeholder='Entrez le mot clé principal')
 existing_text = st.text_area('Texte existant', height=150)
 words_input = st.text_area('Mots et occurrences (format JSON)', height=100, placeholder='{"exemple": 3, "additionnel": 2}')
 
