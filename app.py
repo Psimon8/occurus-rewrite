@@ -10,7 +10,7 @@ st.set_page_config(
 )
 
 # Définir la fonction GPT35
-def GPT35(prompt, systeme, secret_key, temperature=0.9, model="gpt-4o", max_tokens=1200):
+def GPT35(prompt, systeme, secret_key, temperature=0.9, model="gpt-4o-mini", max_tokens=1200):
     url = "https://api.openai.com/v1/chat/completions"
     
     payload = {
