@@ -104,13 +104,18 @@ if uploaded_file:
                     continue
 
                 # Construire le prompt pour chaque ligne
-                user_prompt = (f"Veuillez rédiger un texte générique, ciblant ce mot clé: {main_keyword}, en intégrant naturellement les occurrences suivantes :\n"
+                user_prompt = (f"Veuillez rédiger un texte générique en ciblant le mot clé principal : {main_keyword}. "
+                               f"Incorporez naturellement les occurrences des mots suivants, sans forcer leur usage :\n"
                                f"{words_with_occurrences}\n\n"
-                               f"Le texte doit rester naturel et cohérent. N'utilises pas de mot d'introduction ou de conclusion. "
-                               f"Tu es un expert en rédaction SEO. Parle à la 3ème personne du singulier. "
-                               f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié. "
-                               f"Le texte doit faire environ 300 mots. "
-                               f"Le texte doit être structuré avec des balises <h2> sur le titre du texte, des balises <h3> sur les titres des sous-parties, des balises <p> sur les paragraphes.")
+                               f"Le texte doit être engageant, informatif et optimisé pour le SEO, avec un ton professionnel et fluide. "
+                               f"Rédigez en utilisant la troisième personne du singulier et évitez toute introduction ou conclusion superflue. "
+                               f"Assurez-vous de structurer le contenu avec les balises suivantes : "
+                               f"- <h2> pour le titre principal du texte, "
+                               f"- <h3> pour chaque sous-partie, et "
+                               f"- <p> pour chaque paragraphe de contenu.\n\n"
+                               f"N'utilisez jamais de caractères spéciaux comme * ou # dans le texte. Limitez-vous à un texte d'environ 300 mots. "
+                               f"Votre objectif est de produire un contenu clair et cohérent, qui respecte les bonnes pratiques SEO tout en étant naturel pour le lecteur. "
+                               f"Répondez uniquement avec le texte structuré selon ces consignes.")
 
                 # Afficher le statut actuel
                 status_text.text(f"Texte en cours {index + 1} sur {total_rows}")
