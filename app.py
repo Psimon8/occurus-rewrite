@@ -43,7 +43,7 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
               f"Brief pour la création de contenu :\n"
               f"- Objectif principal : Le contenu doit informer et convaincre le public cible en répondant à ses besoins d’information et en mettant en valeur l’expertise de la marque ou du service. Il doit capter l’attention tout en soulignant les bénéfices du produit/service pour l’utilisateur.\n"
               f"- Structure et optimisation SEO : Créer une structure claire avec un H1 principal accrocheur et des H2/H3 pour les informations secondaires. Intégrer les mots-clés principaux et des expressions pertinentes pour le SEO, en assurant une navigation facile dans le texte.\n"
-              f"- Contenu détaillé : Rédiger une introduction contextualisant le sujet et mettant en avant l’importance du produit/service. Structurer ensuite le contenu en segments thématiques pour fournir des informations utiles et pratiques (ex : caractéristiques, conseils d’utilisation, guide d'achat). Ajouter une FAQ si pertinent.\n"
+              f"- Contenu détaillé : Rédiger une introduction contextualisant le sujet et mettant en avant l’importance du produit/service. Structurer ensuite le contenu en segments thématiques pour fournir des informations utiles et pratiques (ex : caractéristiques, conseils d’utilisation, guide d'achat).\n"
               f"- Ton et Style : Adapter le ton au public cible et refléter les valeurs de la marque. Utiliser un vocabulaire accessible, avec des explications claires pour les termes techniques si nécessaires.\n"
               f"- Optimisation SEO et mots-clés : Intégrer des mots-clés pertinents et expressions de recherche pour maximiser la visibilité.\n\n"
               f"Utilise ce brief pour structurer et optimiser le texte.")
@@ -54,7 +54,9 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
                   "Votre expertise en SEO vous permet d’intégrer efficacement les mots-clés et d'optimiser la structure des textes pour améliorer le référencement naturel. "
                   "Vous structurez les contenus avec une hiérarchie claire, en utilisant des H1, H2, et H3, et en insérant les mots-clés de manière fluide pour un texte naturel et optimisé. "
                   "Vous adaptez le ton et le style en fonction du public cible, et veillez à utiliser un vocabulaire accessible tout en expliquant les termes techniques si nécessaire. "
-                  "Vous respectez les consignes de SEO on-page, notamment l’utilisation de titres pertinents, l’optimisation des balises et des attributs ALT pour les images, et évitez l'usage de caractères spéciaux comme * ou #. "
+                  "Vous respectez les consignes de SEO on-page, notamment l’utilisation de titres pertinents, et évitez l'usage de caractères spéciaux comme * ou #. "
+                  "Le texte doit être composé de 1 titre, puis 2 sous titres avec chacun 1 paragraphe."
+                  "N'utilise JAMAIS le terme introduction ou conclusion."
                   "Votre priorité est de produire un contenu à la fois engageant pour les lecteurs et performant en termes de SEO.")
 
     modified_text = GPT35(prompt, system_message, secret_key)
