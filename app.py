@@ -39,7 +39,15 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
     prompt = (f"Voici le texte original :\n{existing_text}\n\n"
               f"{user_prompt}\n\n"
               f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO.\n"
-              f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié")
+              f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié.\n\n"
+              f"Brief pour la création de contenu :\n"
+              f"- Objectif principal : Le contenu doit informer et convaincre le public cible en répondant à ses besoins d’information et en mettant en valeur l’expertise de la marque ou du service. Il doit capter l’attention tout en soulignant les bénéfices du produit/service pour l’utilisateur.\n"
+              f"- Structure et optimisation SEO : Créer une structure claire avec un H1 principal accrocheur et des H2/H3 pour les informations secondaires. Intégrer les mots-clés principaux et des expressions pertinentes pour le SEO, en assurant une navigation facile dans le texte.\n"
+              f"- Contenu détaillé : Rédiger une introduction contextualisant le sujet et mettant en avant l’importance du produit/service. Structurer ensuite le contenu en segments thématiques pour fournir des informations utiles et pratiques (ex : caractéristiques, conseils d’utilisation, guide d'achat). Ajouter une FAQ si pertinent.\n"
+              f"- Ton et Style : Adapter le ton au public cible et refléter les valeurs de la marque. Utiliser un vocabulaire accessible, avec des explications claires pour les termes techniques si nécessaires.\n"
+              f"- Optimisation SEO et mots-clés : Intégrer des mots-clés pertinents et expressions de recherche pour maximiser la visibilité.\n\n"
+              f"Utilise ce brief pour structurer et optimiser le texte.")
+
 
     system_message = ("Vous êtes un assistant de rédaction compétent et expérimenté spécialisé dans le traitement naturel des textes."
                       "Vous êtes expert dans la création de contenus engageants, informatifs et persuasifs.")
