@@ -64,6 +64,10 @@ if uploaded_file:
         # Initialisation de la colonne pour les résultats
         df['Texte Modifié'] = ""
         
+        # Initialisation de la barre de progression
+        progress_bar = st.progress(0)
+        total_rows = len(df)
+
         # Exécuter la modification pour chaque ligne
         for index, row in df.iterrows():
             main_keyword = row['keyword']
@@ -88,6 +92,9 @@ if uploaded_file:
             # Appel de la fonction pour générer le texte modifié
             modified_text = add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt)
             df.at[index, 'Texte Modifié'] = modified_text
+            
+            # Mise à jour de la barre de progression
+            progress_bar.progress((index + 1) / total_rows)
 
         # Téléchargement du fichier XLSX modifié
         output = BytesIO()
