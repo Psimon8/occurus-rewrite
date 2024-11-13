@@ -51,10 +51,7 @@ def review_content(text, secret_key):
                      f"Assure-toi que le texte reste naturel, fluide et qu'il respecte les consignes de SEO. "
                      f"Supprime les répétitions et améliore le ton si besoin, tout en conservant le sens du texte original. "
                      f"Réponds uniquement avec le texte révisé sans ajout d'annotations ou d'indications.")
-
-    review_system_message = ("Vous êtes un assistant de révision expert, spécialisé dans l'optimisation et la cohérence des contenus générés par IA. "
-                             "Votre objectif est de s'approcher le plus d'un contenu rédigé par un humain, rester pertinent et améliorer la clarté, la correction et la fluidité des textes, en évitant toute incohérence.")
-
+    review_system_message = ("Vous êtes un assistant de révision expert, spécialisé dans l'optimisation et la cohérence des contenus générés par IA.")
     return GPT35(review_prompt, review_system_message, secret_key)
 
 # Interface utilisateur avec Streamlit
@@ -79,9 +76,9 @@ if uploaded_file:
         df['Texte Modifié'] = ""  # Initialisation de la colonne pour les résultats
         df['Texte Révisé'] = ""   # Colonne pour les textes après révision
 
-        # Initialisation de la barre de progression et du texte de statut
-        progress_bar = st.progress(0)
-        status_text = st.empty()
+        # Initialisation de la barre de progression et du texte de statut pour la création
+        creation_progress_bar = st.progress(0)
+        creation_status_text = st.empty()
         total_rows = len(df)
 
         # Bouton pour lancer la création des textes
@@ -113,19 +110,33 @@ if uploaded_file:
                                f"- <p> pour chaque paragraphe de contenu.\n\n"
                                f"N'utilisez jamais de caractères spéciaux comme * ou # dans le texte. Limitez-vous à un texte d'environ 300 mots.")
 
-                # Afficher le statut actuel
-                status_text.text(f"Texte en cours {index + 1} sur {total_rows}")
+                # Afficher le statut actuel pour la création
+                creation_status_text.text(f"Texte généré {index + 1} sur {total_rows}")
 
                 # Appel de la fonction pour générer le texte modifié
                 modified_text = add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt)
                 df.at[index, 'Texte Modifié'] = modified_text
                 
-                # Appel de la fonction pour réviser le texte généré
-                reviewed_text = review_content(modified_text, secret_key)
+                # Mise à jour de la barre de progression pour la création
+                creation_progress_bar.progress((index + 1) / total_rows)
+
+            # Initialisation de la barre de progression et du texte de statut pour la révision
+            review_progress_bar = st.progress(0)
+            review_status_text = st.empty()
+
+            # Exécuter la révision pour chaque texte généré
+            for index in range(total_rows):
+                text_to_review = df.at[index, 'Texte Modifié']
+                
+                # Afficher le statut actuel pour la révision
+                review_status_text.text(f"Texte révisé {index + 1} sur {total_rows}")
+
+                # Appel de la fonction pour réviser le texte
+                reviewed_text = review_content(text_to_review, secret_key)
                 df.at[index, 'Texte Révisé'] = reviewed_text
 
-                # Mise à jour de la barre de progression
-                progress_bar.progress((index + 1) / total_rows)
+                # Mise à jour de la barre de progression pour la révision
+                review_progress_bar.progress((index + 1) / total_rows)
 
             # Préparation du fichier modifié pour le téléchargement
             output = BytesIO()
@@ -133,7 +144,8 @@ if uploaded_file:
             output.seek(0)
 
             # Clear the status message after completion
-            status_text.text("Traitement terminé.")
+            creation_status_text.text("Génération des textes terminée.")
+            review_status_text.text("Révision des textes terminée.")
         else:
             output = None
 
