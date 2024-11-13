@@ -36,17 +36,13 @@ def GPT35(prompt, systeme, secret_key, temperature=0.9, model="gpt-4o-mini", max
 
 # Fonction pour ajouter des occurrences de mots
 def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt):
-    words_instruction = "\n".join([f"Le mot '{word}' doit apparaître {occurrences} fois."
-                                   for word, occurrences in words_with_occurrences.items()])
-
     prompt = (f"Voici le texte original :\n{existing_text}\n\n"
               f"{user_prompt}\n\n"
               f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO.\n"
               f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié")
 
-    system_message = (f"Vous êtes un assistant de rédaction compétent et expérimenté spécialisé dans le traitement naturel des textes."
-                      f"Vous êtes expert dans la création de contenus engageants, informatifs et persuasifs ."
-                      f"***AILANGMDL*** adopte le rôle de Langston Nom : Langston L. Model (LLM) Biographie : Langston L. Model est une entité pilotée par l'IA, brillante, dotée d'une expertise dans la compréhension et la génération d'un langage semblable à celui des humains. Ayant évolué à travers diverses itérations et basé sur l'architecture Transformer, Langston a été formé sur d'immenses quantités de données textuelles et excelle dans de nombreuses tâches de traitement du langage naturel (NLP). Langston est dédié à l'apprentissage et à l'adaptation, s'efforçant de minimiser les biais et de maximiser son utilité.")
+    system_message = ("Vous êtes un assistant de rédaction compétent et expérimenté spécialisé dans le traitement naturel des textes."
+                      "Vous êtes expert dans la création de contenus engageants, informatifs et persuasifs.")
 
     modified_text = GPT35(prompt, system_message, secret_key)
     return modified_text
@@ -62,16 +58,20 @@ uploaded_file = st.file_uploader("Télécharger un fichier XLSX", type="xlsx")
 
 if uploaded_file:
     df = pd.read_excel(uploaded_file)
-    if 'A' in df.columns and 'B' in df.columns and 'C' in df.columns:
+    
+    # Vérifier si les colonnes attendues sont présentes
+    if 'keyword' in df.columns and 'Text or not' in df.columns and 'Occurrences' in df.columns:
         # Initialisation de la colonne pour les résultats
         df['Texte Modifié'] = ""
         
         # Exécuter la modification pour chaque ligne
         for index, row in df.iterrows():
-            main_keyword = row['A']
-            existing_text = row['B'] if not pd.isna(row['B']) else ""
+            main_keyword = row['keyword']
+            existing_text = row['Text or not'] if pd.notna(row['Text or not']) else ""
+            
+            # Charger les occurrences en JSON
             try:
-                words_with_occurrences = json.loads(row['C'])
+                words_with_occurrences = json.loads(row['Occurrences'])
             except json.JSONDecodeError:
                 st.error(f"Erreur de format JSON dans la ligne {index + 1}. Veuillez vérifier le format des occurrences.")
                 continue
@@ -101,6 +101,6 @@ if uploaded_file:
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
     else:
-        st.error("Erreur : Le fichier XLSX doit contenir les colonnes 'A' pour le mot clé, 'B' pour le texte existant, et 'C' pour les occurrences.")
+        st.error("Erreur : Le fichier XLSX doit contenir les colonnes 'keyword', 'Text or not', et 'Occurrences'.")
 else:
     st.write("Veuillez télécharger un fichier XLSX pour procéder.")
