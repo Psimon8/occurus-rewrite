@@ -64,8 +64,9 @@ if uploaded_file:
         # Initialisation de la colonne pour les résultats
         df['Texte Modifié'] = ""
         
-        # Initialisation de la barre de progression
+        # Initialisation de la barre de progression et du texte de statut
         progress_bar = st.progress(0)
+        status_text = st.empty()  # Place to display the current text status
         total_rows = len(df)
 
         # Exécuter la modification pour chaque ligne
@@ -89,6 +90,9 @@ if uploaded_file:
                            f"Le texte doit faire environ 300 mots. "
                            f"Le texte doit être structuré avec des balises <h2> sur le titre du texte, des balises <h3> sur les titres des sous-parties, des balises <p> sur les paragraphes.")
 
+            # Afficher le statut actuel
+            status_text.text(f"Texte en cours {index + 1} sur {total_rows}")
+
             # Appel de la fonction pour générer le texte modifié
             modified_text = add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt)
             df.at[index, 'Texte Modifié'] = modified_text
@@ -107,6 +111,9 @@ if uploaded_file:
             file_name="Texte_Modifie.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+        
+        # Clear the status message after completion
+        status_text.text("Traitement terminé.")
     else:
         st.error("Erreur : Le fichier XLSX doit contenir les colonnes 'keyword', 'Text or not', et 'Occurrences'.")
 else:
