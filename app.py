@@ -1,6 +1,8 @@
 import streamlit as st
 import json
 import requests
+import pandas as pd
+from io import BytesIO
 
 # Configuration de la page Streamlit
 st.set_page_config(
@@ -52,30 +54,53 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
 # Interface utilisateur avec Streamlit
 st.title('Modification de Texte avec Occurrences de Mots')
 
-# Ajouter un champ pour le mot clé principal
-
+# Ajouter un champ pour la clé secrète OpenAI
 secret_key = st.text_input('Clé Secrète OpenAI', type="password")
-main_keyword = st.text_input('Mot clé principal', placeholder='Entrez le mot clé principal')
-existing_text = st.text_area('Texte existant', height=150)
-words_input = st.text_area('Mots et occurrences (format JSON)', height=100, placeholder='{"exemple": 3, "additionnel": 2}')
 
-# Mise à jour du prompt pour inclure le mot clé principal
-default_prompt = (f"Veuillez rédiger un texte générique, ciblant ce mot clé: {main_keyword}, en intégrant naturellement les occurrences suivantes :\n"
-                  f"{words_input}\n\n"
-                  f"Le texte doit rester naturel et cohérent. N'utilises pas mot introduction ou conclusion. Tu es un expert en rédaction SEO. Parle à la 3ème personne du singulier. "
-                  f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié. Le texte doit faire environ 300 mots."
-                  f"Le texte doit être structuré avec des balises <h2> sur le titre du texte, des balises <h3> sur les titres des sous-parties, des balises <p> sur les paragraphes")
+# Chargement du fichier XLSX
+uploaded_file = st.file_uploader("Télécharger un fichier XLSX", type="xlsx")
 
-user_prompt = st.text_area('Prompt pour la modification du texte', value=default_prompt, height=100)
+if uploaded_file:
+    df = pd.read_excel(uploaded_file)
+    if 'A' in df.columns and 'B' in df.columns and 'C' in df.columns:
+        # Initialisation de la colonne pour les résultats
+        df['Texte Modifié'] = ""
+        
+        # Exécuter la modification pour chaque ligne
+        for index, row in df.iterrows():
+            main_keyword = row['A']
+            existing_text = row['B'] if not pd.isna(row['B']) else ""
+            try:
+                words_with_occurrences = json.loads(row['C'])
+            except json.JSONDecodeError:
+                st.error(f"Erreur de format JSON dans la ligne {index + 1}. Veuillez vérifier le format des occurrences.")
+                continue
 
-if st.button('Soumettre'):
-    if not secret_key:
-        st.error("Erreur : Veuillez fournir une clé secrète valide.")
-    else:
-        try:
-            words_with_occurrences = json.loads(words_input)
+            # Construire le prompt pour chaque ligne
+            user_prompt = (f"Veuillez rédiger un texte générique, ciblant ce mot clé: {main_keyword}, en intégrant naturellement les occurrences suivantes :\n"
+                           f"{words_with_occurrences}\n\n"
+                           f"Le texte doit rester naturel et cohérent. N'utilises pas de mot d'introduction ou de conclusion. "
+                           f"Tu es un expert en rédaction SEO. Parle à la 3ème personne du singulier. "
+                           f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié. "
+                           f"Le texte doit faire environ 300 mots. "
+                           f"Le texte doit être structuré avec des balises <h2> sur le titre du texte, des balises <h3> sur les titres des sous-parties, des balises <p> sur les paragraphes.")
+
+            # Appel de la fonction pour générer le texte modifié
             modified_text = add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt)
-            st.subheader('Texte modifié')
-            st.write(modified_text)
-        except json.JSONDecodeError:
-            st.error('Erreur : Veuillez fournir un format JSON valide pour les mots avec occurrences.')
+            df.at[index, 'Texte Modifié'] = modified_text
+
+        # Téléchargement du fichier XLSX modifié
+        output = BytesIO()
+        df.to_excel(output, index=False, engine='xlsxwriter')
+        output.seek(0)
+
+        st.download_button(
+            label="Télécharger le fichier XLSX avec les textes modifiés",
+            data=output,
+            file_name="Texte_Modifie.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+    else:
+        st.error("Erreur : Le fichier XLSX doit contenir les colonnes 'A' pour le mot clé, 'B' pour le texte existant, et 'C' pour les occurrences.")
+else:
+    st.write("Veuillez télécharger un fichier XLSX pour procéder.")
