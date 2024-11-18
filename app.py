@@ -69,6 +69,12 @@ def review_content(text, secret_key):
     review_system_message = ("Vous êtes un assistant de révision expert, spécialisé dans l'optimisation et la cohérence des contenus générés par IA.")
     return GPT35(review_prompt, review_system_message, secret_key)
 
+# Fonction pour calculer le score d'occurrences
+def calculate_occurrence_score(revised_text, words_with_occurrences):
+    total_required = sum(words_with_occurrences.values())
+    actual_count = sum(revised_text.lower().count(word.lower()) for word in words_with_occurrences.keys())
+    return round((actual_count / total_required) * 100, 2) if total_required > 0 else 0
+
 # Interface utilisateur avec Streamlit
 st.title('Modification et Révision de Texte avec Occurrences de Mots')
 
@@ -90,6 +96,7 @@ if uploaded_file:
     if 'keyword' in df.columns and 'Text or not' in df.columns and 'Occurrences' in df.columns:
         df['Texte Modifié'] = ""  # Initialisation de la colonne pour les résultats
         df['Texte Révisé'] = ""   # Colonne pour les textes après révision
+        df['Score Occurrences (%)'] = 0.0  # Colonne pour le score des occurrences
 
         # Initialisation de la barre de progression et du texte de statut pour la création
         creation_progress_bar = st.progress(0)
@@ -133,27 +140,17 @@ if uploaded_file:
                 # Appel de la fonction pour générer le texte modifié
                 modified_text = add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt)
                 df.at[index, 'Texte Modifié'] = modified_text
-                
-                # Mise à jour de la barre de progression pour la création
-                creation_progress_bar.progress((index + 1) / total_rows)
 
-            # Initialisation de la barre de progression et du texte de statut pour la révision
-            review_progress_bar = st.progress(0)
-            review_status_text = st.empty()
-
-            # Exécuter la révision pour chaque texte généré
-            for index in range(total_rows):
-                text_to_review = df.at[index, 'Texte Modifié']
-                
-                # Afficher le statut actuel pour la révision
-                review_status_text.text(f"Texte révisé {index + 1} sur {total_rows}")
-
-                # Appel de la fonction pour réviser le texte
-                reviewed_text = review_content(text_to_review, secret_key)
+                # Révision du texte
+                reviewed_text = review_content(modified_text, secret_key)
                 df.at[index, 'Texte Révisé'] = reviewed_text
 
-                # Mise à jour de la barre de progression pour la révision
-                review_progress_bar.progress((index + 1) / total_rows)
+                # Calcul du score des occurrences
+                occurrence_score = calculate_occurrence_score(reviewed_text, words_with_occurrences)
+                df.at[index, 'Score Occurrences (%)'] = occurrence_score
+
+                # Mise à jour de la barre de progression
+                creation_progress_bar.progress((index + 1) / total_rows)
 
             # Préparation du fichier modifié pour le téléchargement
             output = BytesIO()
@@ -161,8 +158,7 @@ if uploaded_file:
             output.seek(0)
 
             # Clear the status message after completion
-            creation_status_text.text("Génération des textes terminée.")
-            review_status_text.text("Révision des textes terminée.")
+            creation_status_text.text("Traitement terminé.")
         else:
             output = None
 
