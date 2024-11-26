@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # Définir la fonction GPT35
-def GPT35(prompt, systeme, secret_key, temperature=0.9, model="gpt-4o-mini", max_tokens=1200):
+def GPT35(prompt, systeme, secret_key, temperature=0.7, model="gpt-4o-mini", max_tokens=1200):
     url = "https://api.openai.com/v1/chat/completions"
     
     payload = {
@@ -35,7 +35,7 @@ def GPT35(prompt, systeme, secret_key, temperature=0.9, model="gpt-4o-mini", max
     return response_json['choices'][0]['message']['content'].strip()
 
 # Fonction pour ajouter des occurrences de mots
-def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt):
+def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt, temperature):
     prompt = (f"Voici le texte original :\n{existing_text}\n\n"
               f"{user_prompt}\n\n"
               f"Le texte doit rester naturel et cohérent. Tu es un expert en rédaction SEO.\n"
@@ -57,10 +57,10 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
                   "Le texte doit être composé de 1 titre, puis 2 sous titres avec chacun 1 paragraphe."
                   "N'utilise JAMAIS le terme introduction ou conclusion."
                   "Votre priorité est de produire un contenu à la fois engageant pour les lecteurs et performant en termes de SEO.")
-    return GPT35(prompt, system_message, secret_key)
+    return GPT35(prompt, system_message, secret_key, temperature)
 
 # Fonction pour vérifier la cohérence des textes
-def review_content(text, secret_key):
+def review_content(text, secret_key, temperature):
     review_prompt = (f"Voici le texte généré :\n{text}\n\n"
                      f"Effectue une vérification et réécris le texte si nécessaire pour garantir la cohérence, l'uniformité et la correction des propos. "
                      f"Assure-toi que le texte reste naturel, fluide et qu'il respecte les consignes de SEO. "
@@ -70,7 +70,7 @@ def review_content(text, secret_key):
                      f"Supprime les majuscules en trop et inutiles sur les titres H2 et H3"
                      f"Réponds uniquement avec le texte révisé sans ajout d'annotations ou d'indications.")
     review_system_message = ("Vous êtes un assistant de révision expert, spécialisé dans l'optimisation et la cohérence des contenus générés par IA.")
-    return GPT35(review_prompt, review_system_message, secret_key)
+    return GPT35(review_prompt, review_system_message, secret_key, temperature)
 
 # Fonction pour calculer le score d'occurrences
 def calculate_occurrence_score(revised_text, words_with_occurrences):
@@ -83,6 +83,9 @@ st.title('Création de textes SEO avec Occurus Rewrite')
 
 # Ajouter un champ pour la clé secrète OpenAI
 secret_key = st.text_input('Clé Secrète OpenAI', type="password")
+
+# Ajouter une barre de sélection pour la température
+temperature = st.slider('Sélectionnez la température', 0.0, 2.0, 0.7)
 
 # Layout pour les boutons d'import, d'exécution et de téléchargement
 col1, col2, col3 = st.columns(3)
@@ -141,11 +144,11 @@ if uploaded_file:
                 creation_status_text.text(f"Texte généré {index + 1} sur {total_rows}")
 
                 # Appel de la fonction pour générer le texte modifié
-                modified_text = add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt)
+                modified_text = add_word_occurrences(existing_text, words_with_occurrences, secret_key, user_prompt, temperature)
                 df.at[index, 'Texte Modifié'] = modified_text
 
                 # Révision du texte
-                reviewed_text = review_content(modified_text, secret_key)
+                reviewed_text = review_content(modified_text, secret_key, temperature)
                 df.at[index, 'Texte Révisé'] = reviewed_text
 
                 # Calcul du score des occurrences
