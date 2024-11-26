@@ -64,6 +64,7 @@ def review_content(text, secret_key):
     review_prompt = (f"Voici le texte généré :\n{text}\n\n"
                      f"Effectue une vérification et réécris le texte si nécessaire pour garantir la cohérence, l'uniformité et la correction des propos. "
                      f"Assure-toi que le texte reste naturel, fluide et qu'il respecte les consignes de SEO. "
+                     f"Ne mentionnes pas de marque de vêtements ou de chaussures. "
                      f"Supprime les répétitions et améliore le ton si besoin, tout en conservant le sens du texte original. "
                      f"Réponds uniquement avec le texte révisé sans ajout d'annotations ou d'indications.")
     review_system_message = ("Vous êtes un assistant de révision expert, spécialisé dans l'optimisation et la cohérence des contenus générés par IA.")
