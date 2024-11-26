@@ -79,13 +79,13 @@ def calculate_occurrence_score(revised_text, words_with_occurrences):
     return round((actual_count / total_required) * 100, 2) if total_required > 0 else 0
 
 # Interface utilisateur avec Streamlit
-st.title('Modification et Révision de Texte avec Occurrences de Mots')
+st.title('Création de textes SEO avec Occurus Rewrite')
 
 # Ajouter un champ pour la clé secrète OpenAI
 secret_key = st.text_input('Clé Secrète OpenAI', type="password")
 
 # Layout pour les boutons d'import, d'exécution et de téléchargement
-col1, col2, col3 = st.columns([1, 1, 1])
+col1, col2, col3 = st.columns(3)
 
 # Bouton pour charger le fichier
 with col1:
