@@ -67,6 +67,7 @@ def review_content(text, secret_key):
                      f"Ne mentionnes pas de marque de vêtements ou de chaussures. "
                      f"Ne parles pas de livraison, ne parles pas de frais de port, ne parles pas de carte cadeaux. "
                      f"Supprime les répétitions et améliore le ton si besoin, tout en conservant le sens du texte original. "
+                     f"Supprime les majuscules en trop et inutiles sur les titres H2 et H3"
                      f"Réponds uniquement avec le texte révisé sans ajout d'annotations ou d'indications.")
     review_system_message = ("Vous êtes un assistant de révision expert, spécialisé dans l'optimisation et la cohérence des contenus générés par IA.")
     return GPT35(review_prompt, review_system_message, secret_key)
