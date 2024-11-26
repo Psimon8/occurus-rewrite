@@ -42,7 +42,7 @@ def add_word_occurrences(existing_text, words_with_occurrences, secret_key, user
               f"N'utilises jamais de * ou # dans le texte. Réponds uniquement avec le texte modifié.\n\n"
               f"Brief pour la création de contenu :\n"
               f"- Objectif principal : Le contenu doit informer et convaincre le public cible en répondant à ses besoins d’information et en mettant en valeur l’expertise de la marque ou du service. Il doit capter l’attention tout en soulignant les bénéfices du produit/service pour l’utilisateur.\n"
-              f"- Structure et optimisation SEO : Créer une structure claire avec un H1 principal accrocheur et des H2/H3 pour les informations secondaires. Intégrer les mots-clés principaux et des expressions pertinentes pour le SEO, en assurant une navigation facile dans le texte.\n"
+              f"- Structure et optimisation SEO : Créer une structure claire avec un H2 principal accrocheur, naturel et engageant et des H3 sur les avantages secondaires. Intégrer les mots-clés principaux et des expressions pertinentes pour le SEO, en assurant une navigation facile dans le texte.\n"
               f"- Contenu détaillé : Rédiger une introduction contextualisant le sujet et mettant en avant l’importance du produit/service. Structurer ensuite le contenu en segments thématiques pour fournir des informations utiles et pratiques (ex : caractéristiques, conseils d’utilisation, guide d'achat).\n"
               f"- Ton et Style : Adapter le ton au public cible et refléter les valeurs de la marque. Utiliser un vocabulaire accessible, avec des explications claires pour les termes techniques si nécessaires.\n"
               f"- Optimisation SEO et mots-clés : Intégrer des mots-clés pertinents et expressions de recherche pour maximiser la visibilité.\n\n"
@@ -65,6 +65,7 @@ def review_content(text, secret_key):
                      f"Effectue une vérification et réécris le texte si nécessaire pour garantir la cohérence, l'uniformité et la correction des propos. "
                      f"Assure-toi que le texte reste naturel, fluide et qu'il respecte les consignes de SEO. "
                      f"Ne mentionnes pas de marque de vêtements ou de chaussures. "
+                     f"Ne parles pas de livraison, ne parles pas de frais de port, ne parles pas de carte cadeaux. "
                      f"Supprime les répétitions et améliore le ton si besoin, tout en conservant le sens du texte original. "
                      f"Réponds uniquement avec le texte révisé sans ajout d'annotations ou d'indications.")
     review_system_message = ("Vous êtes un assistant de révision expert, spécialisé dans l'optimisation et la cohérence des contenus générés par IA.")
